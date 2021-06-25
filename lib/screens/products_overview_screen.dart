@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:my_shop/providers/cart.dart';
-import 'package:my_shop/screens/cart_screen.dart';
+import 'package:my_shop/widgets/main_drawer.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/products_grid.dart';
 import '../widgets/badge.dart';
+import '../providers/cart.dart';
+import './cart_screen.dart';
 
 enum FilterOptions {
   Favorites,
@@ -18,12 +19,13 @@ class ProductsOverviewScreen extends StatefulWidget {
 
 class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   var _showOnlyFavorites = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('MyShop'),
-        actions: [
+        actions: <Widget>[
           PopupMenuButton(
             onSelected: (FilterOptions selectedValue) {
               setState(() {
@@ -34,14 +36,16 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
                 }
               });
             },
-            icon: Icon(Icons.more_vert),
+            icon: Icon(
+              Icons.more_vert,
+            ),
             itemBuilder: (_) => [
               PopupMenuItem(
                 child: Text('Only Favorites'),
                 value: FilterOptions.Favorites,
               ),
               PopupMenuItem(
-                child: Text('Shaw All'),
+                child: Text('Show All'),
                 value: FilterOptions.All,
               ),
             ],
@@ -52,14 +56,17 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
               value: cart.itemCount.toString(),
             ),
             child: IconButton(
-              icon: Icon(Icons.shopping_cart),
+              icon: Icon(
+                Icons.shopping_cart,
+              ),
               onPressed: () {
-                Navigator.pushNamed(context, '/cart');
+                Navigator.of(context).pushNamed(CartScreen.routeName);
               },
             ),
           ),
         ],
       ),
+      drawer: MainDrawer(),
       body: ProductsGrid(_showOnlyFavorites),
     );
   }
